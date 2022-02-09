@@ -1,37 +1,82 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 
 const FoodItems = () => {
   const [food, setFood] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageInfo, setPageInfo] = useState({
+    totalPages: 1,
+    nextPage: null,
+    prevPage: null,
+  });
 
   useEffect(() => {
-    fetch("http://localhost:4000/food")
+    fetch("http://localhost:4000/food?page=" + page)
       .then((response) => response.json())
-      .then((json) => setFood(json.data));
-  }, []);
+      .then((json) => {
+        const { docs, totalPages, page, prevPage, nextPage } = json.data;
+        setPageInfo({ totalPages, nextPage, prevPage });
+        setPage(page);
+        setFood(docs);
+      });
+  }, [page]);
+
+  const tableHead = ["SL. No", "Food Id", "Food Name", "Price"];
+
+  // Paginate Function
+  const prevPage = () => {
+    setPage(page - 1);
+  };
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
   return (
     <div>
       <h1>Food Data</h1>
-      <Row>
-        {food &&
-          food.length > 0 &&
-          food.map((fd) => (
-            <Col md={3} key={fd._id}>
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>{fd.name}</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </Card.Text>
-                  <Card.Text>${fd.price}</Card.Text>
-                  <Button variant="primary">Buy Now</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-      </Row>
+      <div className="foodItem_list">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              {tableHead.map((th, idx) => (
+                <>
+                  <th key={idx}>{th}</th>
+                </>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {food &&
+              food.map((fd, idx) => (
+                <tr key={fd._id}>
+                  <td>{idx + 1}</td>
+                  <td>{fd._id}</td>
+                  <td>{fd.name}</td>
+                  <td>${fd.price}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+        {page && (
+          <>
+            <button
+              className="btn btn-info"
+              disabled={pageInfo.prevPage === null && true}
+              onClick={prevPage}
+            >
+              Prev
+            </button>
+            <button className="btn btn-success">{page}</button>
+            <button
+              className="btn btn-info"
+              disabled={pageInfo.nextPage === null && true}
+              onClick={nextPage}
+            >
+              Next
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

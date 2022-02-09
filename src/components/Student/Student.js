@@ -89,25 +89,7 @@ const Student = () => {
           </tbody>
         </Table>
         {page && (
-          // <Pagination size="sm">
-          //   <Pagination.Item
-          //     key={page.prevPage !== null ? page.prevPage : "0"}
-          //     active={false}
-          //     onClick={prevPage}
-          //   >
-          //     Prev
-          //   </Pagination.Item>
-          //   <Pagination.Item key={page.page} active={true}>
-          //     {page.page}
-          //   </Pagination.Item>
-          //   <Pagination.Item
-          //     key={page.nextPage !== null ? page.prevPage : "0"}
-          //     active={false}
-          //     onClick={nextPage}
-          //   >
-          //     next
-          //   </Pagination.Item>
-          // </Pagination>
+          
          <>
           <button className="btn btn-info" disabled={pageInfo.prevPage === null && true} onClick={prevPage}>Prev</button>
           <button className="btn btn-success">{page}</button>
