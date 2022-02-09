@@ -3,14 +3,24 @@ import { Form, Table } from "react-bootstrap";
 
 const Student = () => {
   const [stdData, setStdData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageInfo, setPageInfo]=useState({
+    totalPages: 1,
+    nextPage: null,
+    prevPage: null
+  })
   useEffect(() => {
-    fetch("http://localhost:4000/student")
+    fetch("http://localhost:4000/student?page=" + page)
       .then((response) => response.json())
-      .then((json) => setStdData(json.data));
-  }, []);
+      .then((json) => {
+        const { docs, totalPages, page, prevPage, nextPage } = json.data;
+        setStdData(docs);
+        setPageInfo({totalPages, nextPage, prevPage})
 
-  console.log(stdData);
-
+        setPage(page);
+      });
+  }, [page]);
+  console.log(page);
   const tableHeader = [
     "Full Name",
     "Roll Number",
@@ -19,6 +29,16 @@ const Student = () => {
     "Hall",
     "Status",
   ];
+
+  //Pagination
+
+  const prevPage = () => {
+   setPage(page-1)
+  };
+  const nextPage = () => {
+   setPage(page+1)
+  };
+
   return (
     <div>
       <h1>Here is students</h1>
@@ -46,22 +66,54 @@ const Student = () => {
                   <td>{data.class.toUpperCase()}</td>
                   <td>{data.hall.toUpperCase()}</td>
                   <td>
-                    <Form.Select
-                      aria-label="Default select example"
-                      seleced={data.status === 'active' ? 'active': 'inActive'}
-                    >
-                      {data.status === "active" && 
+                    <Form.Select aria-label="Default select example">
+                      {data.status === "active" ? (
+                        <>
+                          <option selected={true} value="active">
+                            Active
+                          </option>
+                          <option value="inactive">Inactive</option>
+                        </>
+                      ) : (
                         <>
                           <option value="active">Active</option>
-                          <option value="inActive">Inactive</option>
-                          </>
-                     }
+                          <option selected={true} value="inactive">
+                            Inactive
+                          </option>
+                        </>
+                      )}
                     </Form.Select>
                   </td>
                 </tr>
               ))}
           </tbody>
         </Table>
+        {page && (
+          // <Pagination size="sm">
+          //   <Pagination.Item
+          //     key={page.prevPage !== null ? page.prevPage : "0"}
+          //     active={false}
+          //     onClick={prevPage}
+          //   >
+          //     Prev
+          //   </Pagination.Item>
+          //   <Pagination.Item key={page.page} active={true}>
+          //     {page.page}
+          //   </Pagination.Item>
+          //   <Pagination.Item
+          //     key={page.nextPage !== null ? page.prevPage : "0"}
+          //     active={false}
+          //     onClick={nextPage}
+          //   >
+          //     next
+          //   </Pagination.Item>
+          // </Pagination>
+         <>
+          <button className="btn btn-info" disabled={pageInfo.prevPage === null && true} onClick={prevPage}>Prev</button>
+          <button className="btn btn-success">{page}</button>
+          <button className="btn btn-info" disabled={pageInfo.nextPage === null && true} onClick={nextPage}>Next</button>
+         </>
+        )}
       </div>
     </div>
   );

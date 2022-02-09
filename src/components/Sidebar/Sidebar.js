@@ -8,16 +8,16 @@ const Sidebar = ({setTab}) => {
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
       <Nav variant="pills" className="flex-column">
         <Nav.Item>
-          <Nav.Link onClick={()=>setTab('food')}>Food Items</Nav.Link>
+          <Nav.Link eventKey="first" onClick={()=>setTab('food')}>Food Items</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={()=>setTab('student')}>Students</Nav.Link>
+          <Nav.Link eventKey="second" onClick={()=>setTab('student')}>Students</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={()=>setTab('distribution')}>Distribution</Nav.Link>
+          <Nav.Link eventKey="third" onClick={()=>setTab('distribution')}>Distribution</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={()=>setTab('distribution')}>Add Student</Nav.Link>
+          <Nav.Link eventKey="four" onClick={()=>setTab('distribution')}>Add Student</Nav.Link>
         </Nav.Item>
       </Nav>
     </Tab.Container>
