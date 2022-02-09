@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <>
       <Header tab={tab} />
-      <Container fluid>
+      <Container fluid className="mt-5">
           <Row>
               <Col md={3}>
                   <Sidebar setTab={setTab}/>

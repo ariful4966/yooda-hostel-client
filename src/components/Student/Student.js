@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Table } from "react-bootstrap";
+import { Button, Form, FormControl, Table } from "react-bootstrap";
 
 const Student = () => {
   const [stdData, setStdData] = useState([]);
@@ -20,7 +20,6 @@ const Student = () => {
         setPage(page);
       });
   }, [page]);
-  console.log(page);
   const tableHeader = [
     "Full Name",
     "Roll Number",
@@ -40,8 +39,21 @@ const Student = () => {
   };
 
   return (
-    <div>
+    <div >
+      <div className="std_header d-flex justify-content-between">
       <h1>Here is students</h1>
+      <div className="search_area">
+      <Form className="d-flex">
+        <FormControl
+          type="search"
+          placeholder="Search"
+          className="me-2"
+          aria-label="Search"
+        />
+        <Button variant="outline-success">Search</Button>
+      </Form>
+      </div>
+      </div>
       <div className="std_info">
         <Table striped bordered hover size="sm">
           <thead>
