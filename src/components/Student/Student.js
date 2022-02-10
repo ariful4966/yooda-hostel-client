@@ -73,7 +73,7 @@ const Student = () => {
                     <input type="checkbox" value={data._id} />
                   </td>
                   <td>{data.name}</td>
-                  <td>{data.rollNumber}</td>
+                  <td>{data.roll}</td>
                   <td>{data.age}</td>
                   <td>{data.class.toUpperCase()}</td>
                   <td>{data.hall.toUpperCase()}</td>
