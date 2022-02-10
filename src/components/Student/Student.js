@@ -4,18 +4,19 @@ import { Button, Form, FormControl, Table } from "react-bootstrap";
 const Student = () => {
   const [stdData, setStdData] = useState([]);
   const [page, setPage] = useState(1);
-  const [pageInfo, setPageInfo]=useState({
+  const [pageInfo, setPageInfo] = useState({
     totalPages: 1,
     nextPage: null,
-    prevPage: null
-  })
+    prevPage: null,
+  });
+
   useEffect(() => {
     fetch("http://localhost:4000/student?page=" + page)
       .then((response) => response.json())
       .then((json) => {
         const { docs, totalPages, page, prevPage, nextPage } = json.data;
         setStdData(docs);
-        setPageInfo({totalPages, nextPage, prevPage})
+        setPageInfo({ totalPages, nextPage, prevPage });
 
         setPage(page);
       });
@@ -32,27 +33,48 @@ const Student = () => {
   //Pagination
 
   const prevPage = () => {
-   setPage(page-1)
+    setPage(page - 1);
   };
   const nextPage = () => {
-   setPage(page+1)
+    setPage(page + 1);
   };
 
+  // Status Change
+  const [stdStatus, setStdStatus] = useState("active");
+  const changeStudentStatus = (e, id) => {
+    setStdStatus(e.target.value);
+
+    fetch("http://localhost:4000/student/" + id,{
+      method: 'PATCH',
+      body:JSON.stringify({status:stdStatus}),
+      headers:{
+        "Content-Type":"application/json; charset=UTF-8",
+        token: sessionStorage.getItem('token')
+      }
+
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+  
+
   return (
-    <div >
+    <div>
       <div className="std_header d-flex justify-content-between">
-      <h1>Here is students</h1>
-      <div className="search_area">
-      <Form className="d-flex">
-        <FormControl
-          type="search"
-          placeholder="Search"
-          className="me-2"
-          aria-label="Search"
-        />
-        <Button variant="outline-success">Search</Button>
-      </Form>
-      </div>
+        <h1>Here is students</h1>
+        <div className="search_area">
+          <Form className="d-flex">
+            <FormControl
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="outline-success">Search</Button>
+          </Form>
+        </div>
       </div>
       <div className="std_info">
         <Table striped bordered hover size="sm">
@@ -78,7 +100,10 @@ const Student = () => {
                   <td>{data.class.toUpperCase()}</td>
                   <td>{data.hall.toUpperCase()}</td>
                   <td>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) => changeStudentStatus(e, `${data._id}`)}
+                    >
                       {data.status === "active" ? (
                         <>
                           <option selected={true} value="active">
@@ -101,12 +126,23 @@ const Student = () => {
           </tbody>
         </Table>
         {page && (
-          
-         <>
-          <button className="btn btn-info" disabled={pageInfo.prevPage === null && true} onClick={prevPage}>Prev</button>
-          <button className="btn btn-success">{page}</button>
-          <button className="btn btn-info" disabled={pageInfo.nextPage === null && true} onClick={nextPage}>Next</button>
-         </>
+          <>
+            <button
+              className="btn btn-info"
+              disabled={pageInfo.prevPage === null && true}
+              onClick={prevPage}
+            >
+              Prev
+            </button>
+            <button className="btn btn-success">{page}</button>
+            <button
+              className="btn btn-info"
+              disabled={pageInfo.nextPage === null && true}
+              onClick={nextPage}
+            >
+              Next
+            </button>
+          </>
         )}
       </div>
     </div>
