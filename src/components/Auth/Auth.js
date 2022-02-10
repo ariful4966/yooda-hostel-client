@@ -1,77 +1,26 @@
 import React, { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
-import { useHistory, useLocation } from "react-router-dom";
+import { Card, Container } from "react-bootstrap";
+import Login from "./Login";
+import SignUp from "./SignUp";
 
 const Auth = () => {
-  let history = useHistory();
-  let location = useLocation();
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleBlur = (e) => {
-    const newUser = { ...user };
-
-    newUser[e.target.name] = e.target.value;
-    setUser(newUser);
-  };
-
-  let { from } = location.state || { from: { pathname: "/" } };
-  let login = (e) => {
-    e.preventDefault();
-    fetch("http://localhost:4000/login", {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-       
-
-        data.token && sessionStorage.setItem("token", data.token)
-
-         history.replace(from);
-      });
-  };
+  const [login, setLogin] = useState(true);
 
   return (
     <div>
       <Container>
-        <div className="login_area d-flex justify-content-center align-items-center">
-          <div className="login_form" style={{ width: "300px" }}>
-            <h1>Authentication</h1>
-            <Form onSubmit={login}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  name="email"
-                  onBlur={handleBlur}
-                />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  onBlur={handleBlur}
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </Form>
+        <div className="login_box d-flex justify-content-center align-items-center mt-5">
+        <Card style={{width:'400px', padding: '20px'}}>
+          <div className="login_area ">
+            <div className="login_form" style={{ width: "100%" }}>
+              <h2>{login ? "Login In ": "Sign Up"}</h2>
+              {login ? <Login /> : <SignUp setLogin={setLogin} />}
+            </div>
           </div>
+          <p style={{textAlign: 'center', cursor:'pointer', color:"green"}} onClick={()=>setLogin(!login)}>
+            {login ? "Create a Admin Account" : "Login in your Admin Account"}
+          </p>
+        </Card>
         </div>
       </Container>
     </div>

@@ -40,13 +40,11 @@ const Student = () => {
   };
 
   // Status Change
-  const [stdStatus, setStdStatus] = useState("active");
   const changeStudentStatus = (e, id) => {
-    setStdStatus(e.target.value);
 
     fetch("http://localhost:4000/student/" + id,{
       method: 'PATCH',
-      body:JSON.stringify({status:stdStatus}),
+      body:JSON.stringify({status:e.target.value}),
       headers:{
         "Content-Type":"application/json; charset=UTF-8",
         token: sessionStorage.getItem('token')
@@ -58,7 +56,6 @@ const Student = () => {
         console.log(data);
       });
   };
-  
 
   return (
     <div>
@@ -101,7 +98,7 @@ const Student = () => {
                   <td>{data.hall.toUpperCase()}</td>
                   <td>
                     <Form.Select
-                      aria-label="Default select example"
+                      
                       onChange={(e) => changeStudentStatus(e, `${data._id}`)}
                     >
                       {data.status === "active" ? (

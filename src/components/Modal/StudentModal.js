@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { ToastMessage } from "../Toast/ToastMessage";
 
 const StudentModal = ({ setModalShow }) => {
   const [student, setStudent] = useState({
@@ -29,13 +30,13 @@ const StudentModal = ({ setModalShow }) => {
       })
       .then(res=>res.json())
       .then(data=>{
+          data.message && <ToastMessage>{data.message}</ToastMessage>
           setModalShow(false)
       })
       .catch(err=>{
           console.log(err);
       })
   }
-  console.log(student);
   return (
     <div>
       <Form onSubmit={handleStudentSubmit}>

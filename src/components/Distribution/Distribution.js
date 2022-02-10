@@ -34,7 +34,7 @@ const Distribution = () => {
                    <td><input type="checkbox" value={dts._id}/></td>
                    <td>{dts.studentId}</td>
                    <td>{new Date(dts.date).toDateString()}</td>
-                   <td>{(dts.foodItemList && dts.foodItemList.map(fdl=><><li key={fdl}>{fdl}</li></>))}</td>
+                   <td>{(dts.foodItemList && dts.foodItemList.map((fdl, i)=><li key={i}>{fdl}</li>))}</td>
                    <td>{dts.shift ? "Shifted": "Unshift"}</td>
                    <td>{(dts.status)}</td>
                </tr>)
