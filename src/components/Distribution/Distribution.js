@@ -30,7 +30,7 @@ const Distribution = () => {
            {
                distribution && distribution.length> 0 && distribution.map((dts)=>
                
-               <tr>
+               <tr key={dts._id}>
                    <td><input type="checkbox" value={dts._id}/></td>
                    <td>{dts.studentId}</td>
                    <td>{new Date(dts.date).toDateString()}</td>

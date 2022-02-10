@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as React from "react";
-import { createContext } from "react";
+import jwt_decode from "jwt-decode";
+import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Auth from "./components/Auth/Auth";
@@ -10,26 +10,29 @@ import Home from "./components/Home/Home";
 export const DataProvider = createContext();
 
 function App() {
-  const [auth, setAuth] = React.useState({
-    name: "Admin",
-    email: "admin@info.com",
+  const [auth, setAuth] = useState({
+    name: "",
+    email:"",
+    role: ""
   });
 
-  React.useEffect(() => {
-    const email = localStorage.getItem("email");
-    const name = localStorage.getItem("name");
-    setAuth({ name: name, email: email });
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const { name, email, role } = jwt_decode(token);
+      setAuth({ name, email, role });
+    }
   }, []);
   return (
     <DataProvider.Provider value={auth}>
       <Router>
         <Switch>
+          <PrivateRoute exact path="/">
+            <Home />
+          </PrivateRoute>
           <Route path="/login">
             <Auth />
           </Route>
-          <PrivateRoute path="/">
-            <Home />
-          </PrivateRoute>
         </Switch>
       </Router>
     </DataProvider.Provider>

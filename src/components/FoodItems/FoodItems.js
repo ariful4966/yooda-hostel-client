@@ -39,9 +39,9 @@ const FoodItems = () => {
           <thead>
             <tr>
               {tableHead.map((th, idx) => (
-                <>
+                
                   <th key={idx}>{th}</th>
-                </>
+                
               ))}
             </tr>
           </thead>

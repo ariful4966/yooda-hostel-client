@@ -3,13 +3,13 @@ import { Redirect, Route } from "react-router-dom";
 import { DataProvider } from "../../App";
 
 export function PrivateRoute({ children, ...rest }) {
-    let {email} = useContext(DataProvider);
-    console.log(email);
+    let user = useContext(DataProvider);
+    // console.log(user);
     return (
       <Route
         {...rest}
         render={({ location }) =>
-          email ? (
+           user.role === 'admin' || sessionStorage.getItem('token') ? (
             children
           ) : (
             <Redirect

@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
-import { DataProvider } from "../../App";
 
 const Auth = () => {
   let history = useHistory();
   let location = useLocation();
-  let auth = useContext(DataProvider);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -31,17 +29,13 @@ const Auth = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+       
 
-        localStorage.setItem("name", data.data.name)
-        localStorage.setItem("email", data.data.email)
-        localStorage.setItem("role", data.data.role)
+        data.token && sessionStorage.setItem("token", data.token)
+
+         history.replace(from);
       });
-
-    if (auth.email) {
-      history.replace(from);
-    }
   };
-  console.log(user);
 
   return (
     <div>
@@ -72,7 +66,7 @@ const Auth = () => {
                   onBlur={handleBlur}
                 />
               </Form.Group>
-              
+
               <Button variant="primary" type="submit">
                 Submit
               </Button>
